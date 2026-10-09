@@ -79,21 +79,21 @@ async fn plantoftheday() -> Result<Json<Plant>, AppError> {
     Ok(Json(plant))
 }
 
-async fn get_json_file(Path(plantname): Path<String>) -> Result<Json<Value>, AppError> {
-    // Sanitize input: prevent path traversal attacks (e.g., "../")
+async fn get_json_file(Path(plantname): Path<String>) -> Result<Json<Plant>, AppError> {
     info!("Handling get_json_file request with id:{}", plantname);
-    //if id.contains('/') || id.contains('\\') || id.contains("..") {
-    //    return Err(AppError::BadRequest("Invalid input format".into()));
-    //}
+    // Sanitize input: prevent path traversal attacks (e.g., "../")
+    if plantname.contains('/') || plantname.contains('\\') || plantname.contains("..") {
+        return Err(AppError::BadRequest("Invalid input format".into()));
+    }
     // Construct path dynamically (e.g., "data/123.json")
     let file_path = format!("/home/damonv/plants/plant_data/{}.json", plantname);
     // Read the file asynchronously
-    // let content = fs::read_to_string(&file_path).await?;
+    let content = fs::read_to_string(&file_path).await?;
 
     // Parse string content into serde_json::Value
-    // let json: Value = serde_json::from_str(&content)?;
+    let plant: Plant = serde_json::from_str(&content)?;
 
-    Ok(Json(json!({ "path": [ format!("{}", file_path) ] })))
+    Ok(Json(plant))
 }
 
 
