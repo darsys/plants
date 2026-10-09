@@ -15,8 +15,10 @@ impl IntoResponse for AppError {
     fn into_response(self) -> Response {
         info!("Into response");
         match self {
-            AppError::NotFound => (StatusCode::NOT_FOUND, "JSON file not found").into_response(),
-            AppError::BadRequest(msg) => (StatusCode::BAD_REQUEST, msg).into_response(),
+            AppError::NotFound => (StatusCode::NOT_FOUND, "JSON file not found")
+                .into_response(),
+            AppError::BadRequest(msg) => (StatusCode::BAD_REQUEST, msg)
+                .into_response(),
             AppError::Internal(err) => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 format!("Internal server error: {}", err),

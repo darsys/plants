@@ -52,7 +52,7 @@ async fn root() -> &'static str {
     "You have found plants! Welcome!"
 }
 
-async fn dotheid(Path(_id): Path<String>) -> &'static str {
+async fn dotheid(Path(_id): Path<u64>) -> &'static str {
     info!("Do the id");
     "You have found plants! Welcome!"
 }
